@@ -37,7 +37,7 @@
     },
     {
       "label": "Dev: Start All",
-      "dependsOn": ["Backend: Flask", "Frontend: React", "Start MySQL80 Service"],
+      "dependsOn": ["Backend: Flask", "Start MySQL80 Service", "Frontend: React"],
       "dependsOrder": "parallel",
       "problemMatcher": []
     }
