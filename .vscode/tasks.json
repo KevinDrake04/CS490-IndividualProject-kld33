@@ -22,10 +22,25 @@
       "problemMatcher": []
     },
     {
-      "label": "Dev: Start both",
+      "label": "Start MySQL80 Service",
+      "type": "shell",
+      "command": "Start-Process powershell -Verb RunAs -ArgumentList '-Command', 'net start mysql80'",
+      "presentation": { "panel": "dedicated", "group": "backend", "reveal": "always" },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev: Start React and Flask",
       "dependsOn": ["Backend: Flask", "Frontend: React"],
       "dependsOrder": "parallel",
       "problemMatcher": []
+    },
+    {
+      "label": "Dev: Start All",
+      "dependsOn": ["Backend: Flask", "Frontend: React", "Start MySQL80 Service"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
     }
+
   ]
 }
