@@ -9,8 +9,7 @@ export default function Home() {
     fetch("/getTop5Films")
       .then((res) => res.json())
       .then((data) => {
-        setTopFilms(data);
-        console.log("films:", data);
+        setTopFilms(data.tables ?? []);
       })
   }, []);
 
@@ -23,7 +22,7 @@ export default function Home() {
       })
   }, []);
   */
-
+ 
   return (
     <div style={{ padding: "4rem 2rem", textAlign: "center" }}>
       <h1>Welcome to the Home Page</h1>
@@ -33,7 +32,7 @@ export default function Home() {
       <p>   As a user I want to view top 5 rented films of all times</p>
       <p>   As a user I want to be able to click on any of the top 5 films and view its details</p>
       {topFilms ? (
-        <pre>{JSON.stringify(topFilms, null, 2)}</pre>
+        <pre>{topFilms}</pre>
       ) : (
         <p>Loading films…</p>
       )}
