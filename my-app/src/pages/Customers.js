@@ -1,11 +1,28 @@
-// src/components/Customers.js
+import { useState, useEffect } from "react";
+
 export default function Customers() {
+  const [customers, setCustomers] = useState(null);
+
+  useEffect(() => {
+    fetch("/getAllCustomers")
+      .then((res) => res.json())
+      .then((data) => {
+        setCustomers(data.tables ?? []);
+      })
+  }, []);
+
+
   return (
     <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
       <h1>Customers Page</h1>
       <p>Customer list or dashboard goes here.</p>
       <p>Customer Page (7):</p>
-      <p>   As a user I want to view a list of all customers (Pref. using pagination)</p>
+      <p>   As a user I want to view a list of all customers (using pagination)</p>
+      {customers ? (
+        <pre>{customers}</pre>
+      ) : (
+        <p>Loading Customers…</p>
+      )}
       <p>   As a user I want the ability to filter/search customers by their customer id, first name or last name.</p>
       <p>   As a user I want to be able to add a new customer</p>
       <p>   As a user I want to be able to edit a customer’s details</p>

@@ -1,4 +1,3 @@
-// src/components/Home.js
 import { useState, useEffect } from "react";
 
 export default function Home() {
@@ -32,7 +31,11 @@ export default function Home() {
       <p>   As a user I want to view top 5 rented films of all times</p>
       <p>   As a user I want to be able to click on any of the top 5 films and view its details</p>
       {topFilms ? (
-        <pre>{topFilms}</pre>
+        <><pre>{topFilms[0]}</pre>
+        <pre>{topFilms[1]}</pre>
+        <pre>{topFilms[2]}</pre>
+        <pre>{topFilms[3]}</pre>
+        <pre>{topFilms[4]}</pre></>
       ) : (
         <p>Loading films…</p>
       )}

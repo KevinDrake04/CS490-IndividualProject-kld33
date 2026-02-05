@@ -49,7 +49,7 @@ def get_topFilms():
 def get_topActors():
     cursor=con.cursor()
     query=  ("""
-            
+
             """)
     
     cursor.execute(query)
@@ -73,14 +73,14 @@ def get_topActors():
 def get_allCustomers():
     cursor=con.cursor()
     query=  ("""
-            
+            SELECT c.customer_id, c.first_name, c.last_name, c.email FROM customer c;
             """)
     
     cursor.execute(query)
     temps=cursor.fetchall()
     cursor.close()
-    temp_list=[temp[0] for temp in temps]
-    return jsonify({"tables":temps_list}),200
+    temp_list=[temp for temp in temps]
+    return jsonify({"tables":temp_list}),200
 
 #view customer details and see their past and present rental history
 @app.route("/getCustomerDetails",methods=['GET'])
