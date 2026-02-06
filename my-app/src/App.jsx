@@ -9,9 +9,7 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <Button>Click me</Button>
-        
+      <div className="App">        
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

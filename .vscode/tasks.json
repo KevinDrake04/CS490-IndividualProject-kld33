@@ -31,13 +31,13 @@
     {
       "label": "Dev: Start React and Flask",
       "dependsOn": ["Backend: Flask", "Frontend: React"],
-      "dependsOrder": "sequence",
+      "dependsOrder": "parallel",
       "problemMatcher": []
     },
     {
       "label": "Dev: Start All",
       "dependsOn": ["Backend: Flask", "Start MySQL80 Service", "Frontend: React"],
-      "dependsOrder": "sequence",
+      "dependsOrder": "parallel",
       "problemMatcher": []
     }
 
