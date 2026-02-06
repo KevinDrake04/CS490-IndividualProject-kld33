@@ -1,4 +1,4 @@
-// src/App.js
+import { Button } from "@/components/ui/button"
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -10,8 +10,9 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
+        <Button>Click me</Button>
+        
         <Navbar />
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/films" element={<Films />} />
