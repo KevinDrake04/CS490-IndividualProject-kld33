@@ -4,7 +4,7 @@ export default function Customers() {
   const [customers, setCustomers] = useState(null);
 
   useEffect(() => {
-    fetch("/getAllCustomers")
+    fetch("/sql/getAllCustomers")
       .then((res) => res.json())
       .then((data) => {
         setCustomers(data.tables ?? []);

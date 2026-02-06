@@ -11,4 +11,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      '/sql': {
+        target: 'http://127.0.0.1:5000', // The address of your Flask development server
+      },
+    },
+  },
 })

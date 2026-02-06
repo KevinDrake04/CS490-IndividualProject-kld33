@@ -5,7 +5,7 @@ export default function Home() {
   const [topActors, setTopActors] = useState(null);
 
   useEffect(() => {
-    fetch("/getTop5Films")
+    fetch("sql/getTop5Films")
       .then((res) => res.json())
       .then((data) => {
         setTopFilms(data.tables ?? []);
@@ -13,7 +13,7 @@ export default function Home() {
   }, []);
 
   /*useEffect(() => {
-    fetch("/getTop5Actors")
+    fetch("sql/getTop5Actors")
       .then((res) => res.json())
       .then((data) => {
         setTopActors(data);

@@ -11,23 +11,12 @@ con=mysql.connector.connect(
     database='sakila'
 )
 
-@app.route("/getTable",methods=['GET'])
-def get_tables():
-    cursor=con.cursor()
-    cursor.execute("SHOW TABLES;")
-    tables=cursor.fetchall()
-    cursor.close()
-    table_names=[table[0] for table in tables]
-    return jsonify({"tables":table_names}),200
-
-
-
 ###############
 #Landing Page
 ###############
 
 #Top 5 rented films of all time
-@app.route("/getTop5Films",methods=['GET'])
+@app.route("/sql/getTop5Films",methods=['GET'])
 def get_topFilms():
     cursor=con.cursor()
     query=  ("""
@@ -45,7 +34,7 @@ def get_topFilms():
     return jsonify({"tables":film_names}),200
 
 #Top 5 actors that are part of films available in store
-@app.route("/getTop5Actors",methods=['GET'])
+@app.route("/sql/getTop5Actors",methods=['GET'])
 def get_topActors():
     cursor=con.cursor()
     query=  ("""
@@ -69,7 +58,7 @@ def get_topActors():
 ###############
 
 #list of all customers
-@app.route("/getAllCustomers",methods=['GET'])
+@app.route("/sql/getAllCustomers",methods=['GET'])
 def get_allCustomers():
     cursor=con.cursor()
     query=  ("""
@@ -83,7 +72,7 @@ def get_allCustomers():
     return jsonify({"tables":temp_list}),200
 
 #view customer details and see their past and present rental history
-@app.route("/getCustomerDetails",methods=['GET'])
+@app.route("/sql/getCustomerDetails",methods=['GET'])
 def get_customerDetails():
     cursor=con.cursor()
     query=  ("""
