@@ -45,7 +45,7 @@ def get_topActors():
     temps=cursor.fetchall()
     cursor.close()
     temp_list=[temp[0] for temp in temps]
-    return jsonify({"tables":temps_list}),200
+    return jsonify({"tables":temp_list}),200
 
 ###############
 #Films Page
@@ -66,24 +66,34 @@ def get_allCustomers():
             """)
     
     cursor.execute(query)
-    temps=cursor.fetchall()
+    customers=cursor.fetchall()
     cursor.close()
-    temp_list=[temp for temp in temps]
-    return jsonify({"tables":temp_list}),200
+    customer_list=[customer for customer in customers]
+    return jsonify({"All Customers":customer_list}),200
 
-#view customer details and see their past and present rental history
-@app.route("/sql/getCustomerDetails",methods=['GET'])
-def get_customerDetails():
-    cursor=con.cursor()
-    query=  ("""
-            
+# view customers past and present rental history
+@app.route("/sql/getCustomerRentals/<int:customer_id>", methods=["GET"])
+def get_customer_rentals(customer_id):
+    cursor = con.cursor()
+    query = ("""
+            SELECT f.title, r.rental_date, r.return_date
+            FROM rental r
+            JOIN inventory i ON r.inventory_id = i.inventory_id
+            JOIN film f ON i.film_id = f.film_id
+            WHERE r.customer_id = %s
+            ORDER BY r.rental_date DESC;
             """)
-    
-    cursor.execute(query)
-    temps=cursor.fetchall()
+
+    cursor.execute(query, (customer_id,))
+    rows = cursor.fetchall()
     cursor.close()
-    temp_list=[temp[0] for temp in temps]
-    return jsonify({"tables":temps_list}),200
+
+    rentals = [rental for rental in rows]
+
+    # use one consistent key your frontend reads
+    return jsonify({"tables": rentals}), 200
+
+
 
 ###############
 
