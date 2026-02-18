@@ -12,15 +12,14 @@ export default function Home() {
       })
   }, []);
 
-  /*useEffect(() => {
-    fetch("sql/getTop5Actors")
-      .then((res) => res.json())
-      .then((data) => {
-        setTopActors(data);
-        console.log("actors:", data);
-      })
-  }, []);
-  */
+  useEffect(() => {
+  fetch("sql/getTop5Actors")
+    .then((res) => res.json())
+    .then((data) => setTopActors(data.tables ?? []));
+}, []);
+
+
+  
  
   return (
     <div style={{ padding: "4rem 2rem", textAlign: "center" }}>
