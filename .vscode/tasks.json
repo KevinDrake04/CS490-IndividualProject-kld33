@@ -14,8 +14,7 @@
     {
       "label": "Frontend: React",
       "type": "shell",
-      "command": "npm",
-      "args": ["start"],
+      "command": "npm run dev",
       "options": { "cwd": "${workspaceFolder}/my-app" },
       "presentation": { "panel": "dedicated", "group": "frontend", "reveal": "always" },
       "isBackground": true,
@@ -25,7 +24,7 @@
       "label": "Start MySQL80 Service",
       "type": "shell",
       "command": "Start-Process powershell -Verb RunAs -ArgumentList '-Command', 'net start mysql80'",
-      "presentation": { "panel": "dedicated", "group": "backend", "reveal": "always" },
+      "presentation": { "panel": "dedicated", "group": "backend", "reveal": "never" },
       "isBackground": true,
       "problemMatcher": []
     },
