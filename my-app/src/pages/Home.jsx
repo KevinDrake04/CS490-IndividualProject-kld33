@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [topFilms, setTopFilms] = useState(null);
@@ -13,46 +15,75 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-  fetch("sql/getTop5Actors")
-    .then((res) => res.json())
-    .then((data) => setTopActors(data.tables ?? []));
-}, []);
+    fetch("sql/getTop5Actors")
+      .then((res) => res.json())
+      .then((data) => setTopActors(data.tables ?? []));
+  }, []);
 
 
-  
- 
   return (
-    <div style={{ padding: "4rem 2rem", textAlign: "center" }}>
-      <h1>Welcome to the Home Page</h1>
-      <p>This is the main landing area.</p>
+    <div className="px-8 py-16 space-y-12">
+      {/* Top 5 Rented Films */}
+      <section className="space-y-6">
+        <h1 className="text-center text-4xl font-extrabold">Top 5 Rented Films</h1>
 
-      <h2>Top 5 Rented Films</h2>
-      <p>   As a user I want to view top 5 rented films of all times</p>
-      <p>   As a user I want to be able to click on any of the top 5 films and view its details</p>
-      {topFilms ? (
-        <>
-        <pre>{topFilms[0]}</pre>
-        <pre>{topFilms[1]}</pre>
-        <pre>{topFilms[2]}</pre>
-        <pre>{topFilms[3]}</pre>
-        <pre>{topFilms[4]}</pre></>
-      ) : (
-        <p>Loading films…</p>
-      )}
+        <div className="flex justify-center">
+          <div className="grid w-full max-w-[1400px] grid-cols-5 gap-4">
+            {topFilms ? (
+              topFilms.slice(0, 5).map((film, i) => (
+                <Card key={i} className="w-full">
+                  <CardHeader>
+                    <CardTitle className="text-sm leading-tight">{film}</CardTitle>
+                  </CardHeader>
 
-      <h2>Top 5 Actors</h2>
-      <p>   As a user I want to be able to view top 5 actors that are part of films I have in the store</p>
-      <p>   As a user I want to be able to view the actor’s details and view their top 5 rented films</p>
-      {topActors ? (
-        <>
-        <pre>{topActors[0]}</pre>
-        <pre>{topActors[1]}</pre>
-        <pre>{topActors[2]}</pre>
-        <pre>{topActors[3]}</pre>
-        <pre>{topActors[4]}</pre></>
-      ) : (
-        <p>Loading actors…</p>
-      )}
+                  <CardContent>
+                    <div className="h-[140px] w-full rounded-md border border-dashed flex items-center justify-center text-xs text-muted-foreground">
+                      Film Poster Placeholder
+                    </div>
+                  </CardContent>
+
+                  <CardFooter className="justify-end">
+                    <Button size="sm">View Details</Button>
+                  </CardFooter>
+                </Card>
+              ))
+            ) : (
+              <p>Loading films…</p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Top 5 Actors */}
+      <section className="space-y-6">
+        <h1 className="text-center text-4xl font-extrabold">Top 5 Actors</h1>
+
+        <div className="flex justify-center">
+          <div className="grid w-full max-w-[1400px] grid-cols-5 gap-4">
+            {topActors ? (
+              topActors.slice(0, 5).map((actor, i) => (
+                <Card key={i} className="w-full">
+                  <CardHeader>
+                    <CardTitle className="text-sm leading-tight">{actor}</CardTitle>
+                  </CardHeader>
+
+                  <CardContent>
+                    <div className="h-[140px] w-full rounded-md border border-dashed flex items-center justify-center text-xs text-muted-foreground">
+                      Actor Silhouette Placeholder
+                    </div>
+                  </CardContent>
+
+                  <CardFooter className="justify-end">
+                    <Button size="sm">View Details</Button>
+                  </CardFooter>
+                </Card>
+              ))
+            ) : (
+              <p>Loading actors…</p>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

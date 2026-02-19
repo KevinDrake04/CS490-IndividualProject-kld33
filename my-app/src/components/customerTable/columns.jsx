@@ -57,8 +57,9 @@ export function getColumns({
               <DropdownMenuContent align="start">
                 <DropdownMenuItem onClick={() => {
                   console.log("clicked view rental details, customer_id =", customer.customer_id)
-                  onViewRentalDetails(customer.customer_id, customer)}}>
-                  View customer rental details
+                  onViewRentalDetails(customer.customer_id, customer)
+                }}>
+                  View customer history
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => onEditCustomer(customer.customer_id, customer)}>

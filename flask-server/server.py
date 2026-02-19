@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-import mysql.connector
 from mysql.connector.pooling import MySQLConnectionPool
 
 app = Flask(__name__)
@@ -125,8 +124,7 @@ def delete_customer(customer_id):
 
         # Block if any active (unreturned) rentals exist
         cursor.execute(
-            "SELECT COUNT(*) FROM rental WHERE customer_id = %s AND return_date IS NULL",
-            (customer_id,),
+            "SELECT COUNT(*) FROM rental WHERE customer_id = %s AND return_date IS NULL", (customer_id,),
         )
         open_count = cursor.fetchone()[0]
         if open_count > 0:
@@ -183,23 +181,20 @@ def add_customer():
         else:
             #If country is new, insert into country database
             cursor.execute(
-                "INSERT INTO country (country, last_update) VALUES (%s, NOW())",
-                (data["country"],),
+                "INSERT INTO country (country, last_update) VALUES (%s, NOW())", (data["country"],),
             )
             country_id = cursor.lastrowid
 
         # 2) city_id get or create, must belong to country_id
         cursor.execute(
-            "SELECT city_id FROM city WHERE city = %s AND country_id = %s",
-            (data["city"], country_id),
+            "SELECT city_id FROM city WHERE city = %s AND country_id = %s", (data["city"], country_id),
         )
         row = cursor.fetchone()
         if row:
             city_id = row[0]
         else:
             cursor.execute(
-                "INSERT INTO city (city, country_id, last_update) VALUES (%s, %s, NOW())",
-                (data["city"], country_id),
+                "INSERT INTO city (city, country_id, last_update) VALUES (%s, %s, NOW())", (data["city"], country_id),
             )
             city_id = cursor.lastrowid
 
@@ -286,8 +281,7 @@ def update_customer(customer_id):
             city_id = row[0]
         else:
             cursor.execute(
-                "INSERT INTO city (city, country_id, last_update) VALUES (%s, %s, NOW())",
-                (data["city"], country_id),
+                "INSERT INTO city (city, country_id, last_update) VALUES (%s, %s, NOW())", (data["city"], country_id),
             )
             city_id = cursor.lastrowid
 
@@ -349,7 +343,8 @@ def get_customer_details(customer_id):
     try:
         query = """
                 SELECT
-                    c.customer_id, c.first_name, c.last_name, c.email, c.address_id, 
+                    c.customer_id, c.first_name, c.last_name, c.email, c.address_id,
+                    c.create_date, c.last_update,
                     a.address, a.address2, a.district, a.postal_code, a.phone,
                     ci.city, co.country
                 FROM customer c
@@ -361,10 +356,17 @@ def get_customer_details(customer_id):
         cursor.execute(query, (customer_id,))
         row = cursor.fetchone()
 
+        # JSON-safe datetime conversion
+        if row and row.get("create_date"):
+            row["create_date"] = row["create_date"].replace(microsecond=0).isoformat()
+        if row and row.get("last_update"):
+            row["last_update"] = row["last_update"].replace(microsecond=0).isoformat()
+
         return jsonify({"customer": row}), 200
     finally:
         cursor.close()
         cnx.close()
+
 
 
 if __name__ == "__main__":

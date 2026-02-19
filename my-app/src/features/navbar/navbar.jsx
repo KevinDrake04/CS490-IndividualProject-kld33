@@ -16,8 +16,7 @@ function NavItem({ to, label, end }) {
           to={to}
           end={end}
           className={({ isActive }) =>
-            `${navigationMenuTriggerStyle()} !text-xl ${
-              isActive ? "font-semibold" : ""
+            `${navigationMenuTriggerStyle()} !text-xl ${isActive ? "font-semibold" : ""
             }`
           }
         >
@@ -35,7 +34,7 @@ export default function Navbar() {
         {/* Left: logo */}
         <div className="flex items-center">
           <NavLink to="/" className="text-2xl font-semibold">
-            Sakila Films
+            Sakila Films: Employee View
           </NavLink>
         </div>
 

@@ -23,9 +23,6 @@ export default function App() {
           element={
             <div style={{ padding: "4rem", textAlign: "center" }}>
               <h1>404 - Page Not Found</h1>
-              <p>
-                Try going back to <a href="/">Home</a>
-              </p>
             </div>
           }
         />

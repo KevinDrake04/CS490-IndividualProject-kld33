@@ -26,6 +26,18 @@ function formatDate(value) {
 export default function RentalDetailsDialog({ open, onOpenChange, customer }) {
   const [rentalsLoading, setRentalsLoading] = useState(false)
   const [rentals, setRentals] = useState([])
+  const [customerDates, setCustomerDates] = useState(null)
+
+  useEffect(() => {
+    if (!open) return
+    if (!customer?.customer_id) return
+
+    fetch(`/sql/getCustomerDetails/${customer.customer_id}`)
+      .then((res) => res.json())
+      .then((data) => setCustomerDates(data?.customer ?? null))
+      .catch((err) => console.error(err))
+  }, [open, customer?.customer_id])
+
 
   useEffect(() => {
     if (!open) return
@@ -54,15 +66,15 @@ export default function RentalDetailsDialog({ open, onOpenChange, customer }) {
         const mapped = rawRows.map((r) =>
           Array.isArray(r)
             ? {
-                title: r?.[0] ?? "",
-                rental_date: r?.[1] ?? null,
-                return_date: r?.[2] ?? null,
-              }
+              title: r?.[0] ?? "",
+              rental_date: r?.[1] ?? null,
+              return_date: r?.[2] ?? null,
+            }
             : {
-                title: r?.title ?? "",
-                rental_date: r?.rental_date ?? null,
-                return_date: r?.return_date ?? null,
-              }
+              title: r?.title ?? "",
+              rental_date: r?.rental_date ?? null,
+              return_date: r?.return_date ?? null,
+            }
         )
 
         setRentals(mapped)
@@ -84,7 +96,7 @@ export default function RentalDetailsDialog({ open, onOpenChange, customer }) {
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>
-            Rental Details
+            Customer Details
             {customer
               ? ` — ${customer.first_name ?? ""} ${customer.last_name ?? ""} (ID: ${customer.customer_id})`
               : ""}
@@ -93,6 +105,18 @@ export default function RentalDetailsDialog({ open, onOpenChange, customer }) {
             Past and present rental history for this customer.
           </DialogDescription>
         </DialogHeader>
+        <div className="mb-4 rounded-md border p-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Created Date</p>
+              <p className="text-sm">{formatDate(customerDates?.create_date)}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Last Updated Date</p>
+              <p className="text-sm">{formatDate(customerDates?.last_update)}</p>
+            </div>
+          </div>
+        </div>
 
         {rentalsLoading ? (
           <p className="py-4">Loading rentals...</p>
@@ -100,6 +124,7 @@ export default function RentalDetailsDialog({ open, onOpenChange, customer }) {
           <p className="py-4">No rental records found.</p>
         ) : (
           <div className="max-h-[60vh] overflow-auto rounded-md border">
+            <p className="py-4">Rental Details</p>
             <Table>
               <TableHeader>
                 <TableRow>
