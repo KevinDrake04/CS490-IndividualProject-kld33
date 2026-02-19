@@ -4,7 +4,6 @@ from mysql.connector.pooling import MySQLConnectionPool
 
 app = Flask(__name__)
 
-# Create a connection pool instead of one global connection
 pool = MySQLConnectionPool(
     pool_name="sakila_pool",
     pool_size=5,
@@ -14,8 +13,6 @@ pool = MySQLConnectionPool(
     database="sakila",
     port=3306,
     autocommit=True,
-
-    # Helps avoid SSL WRONG_VERSION_NUMBER in local dev setups
     ssl_disabled=True,
 )
 
@@ -115,6 +112,56 @@ def get_customer_rentals(customer_id):
         rows = cursor.fetchall()
         return jsonify({"tables": rows}), 200
     finally:
+        cursor.close()
+        cnx.close()
+
+@app.route("/sql/deleteCustomer/<int:customer_id>", methods=["DELETE"])
+def delete_customer(customer_id):
+    cnx = pool.get_connection()
+    cursor = cnx.cursor()
+    try:
+        cnx.autocommit = False
+        cnx.start_transaction()
+
+        # Block if any active (unreturned) rentals exist
+        cursor.execute(
+            "SELECT COUNT(*) FROM rental WHERE customer_id = %s AND return_date IS NULL",
+            (customer_id,),
+        )
+        open_count = cursor.fetchone()[0]
+        if open_count > 0:
+            cnx.rollback()
+            return jsonify({"error": "Cannot delete customer: active rentals exist."}), 409
+
+        # Grab address_id
+        cursor.execute("SELECT address_id FROM customer WHERE customer_id = %s", (customer_id,))
+        row = cursor.fetchone()
+        address_id = row[0]
+
+        # Delete everything
+        cursor.execute("DELETE FROM payment WHERE customer_id = %s", (customer_id,))
+        cursor.execute("DELETE FROM rental WHERE customer_id = %s", (customer_id,))
+        cursor.execute("DELETE FROM customer WHERE customer_id = %s", (customer_id,))
+
+        # Try deleting address too
+        if address_id is not None:
+            cursor.execute("SELECT COUNT(*) FROM customer WHERE address_id = %s", (address_id,))
+            customer_refs = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(*) FROM staff WHERE address_id = %s", (address_id,))
+            staff_refs = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(*) FROM store WHERE address_id = %s", (address_id,))
+            store_refs = cursor.fetchone()[0]
+
+            #check if any other objects reference address id
+            if customer_refs == 0 and staff_refs == 0 and store_refs == 0:
+                cursor.execute("DELETE FROM address WHERE address_id = %s", (address_id,))
+
+        cnx.commit()
+        return jsonify({"ok": True}), 200
+    finally:
+        cnx.autocommit = True
         cursor.close()
         cnx.close()
 

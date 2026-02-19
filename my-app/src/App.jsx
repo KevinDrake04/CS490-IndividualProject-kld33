@@ -3,7 +3,6 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Films from './pages/Films';
 import Customers from './pages/Customers';
-import CustomerTable from './pages/customerTable';
 import './App.css';
 
 function App() {
@@ -17,10 +16,7 @@ function App() {
           <Route path="/films" element={<Films />} />
 
           {/* Customers parent route */}
-          <Route path="/customers" element={<Customers />}>
-            {/* show table at /customers */}
-            <Route index element={<CustomerTable />} />
-          </Route>
+          <Route path="/customers" element={<Customers />}/>
 
           {/* catch 404 */}
           <Route
