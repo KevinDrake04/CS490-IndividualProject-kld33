@@ -61,7 +61,7 @@ export function getColumns({
                   View customer rental details
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => onEditCustomer(customer)}>
+                <DropdownMenuItem onClick={() => onEditCustomer(customer.customer_id, customer)}>
                   Edit customer details
                 </DropdownMenuItem>
 

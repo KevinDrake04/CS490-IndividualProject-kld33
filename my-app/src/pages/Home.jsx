@@ -30,7 +30,8 @@ export default function Home() {
       <p>   As a user I want to view top 5 rented films of all times</p>
       <p>   As a user I want to be able to click on any of the top 5 films and view its details</p>
       {topFilms ? (
-        <><pre>{topFilms[0]}</pre>
+        <>
+        <pre>{topFilms[0]}</pre>
         <pre>{topFilms[1]}</pre>
         <pre>{topFilms[2]}</pre>
         <pre>{topFilms[3]}</pre>
@@ -43,7 +44,8 @@ export default function Home() {
       <p>   As a user I want to be able to view top 5 actors that are part of films I have in the store</p>
       <p>   As a user I want to be able to view the actor’s details and view their top 5 rented films</p>
       {topActors ? (
-        <><pre>{topActors[0]}</pre>
+        <>
+        <pre>{topActors[0]}</pre>
         <pre>{topActors[1]}</pre>
         <pre>{topActors[2]}</pre>
         <pre>{topActors[3]}</pre>

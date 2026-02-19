@@ -1,37 +1,35 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Films from './pages/Films';
-import Customers from './pages/Customers';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
-function App() {
+import Navbar from "./features/navbar/navbar"
+
+import Home from "./pages/Home"
+import Films from "./pages/Films"
+import Customers from "./pages/Customers"
+
+import "./App.css"
+
+export default function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <Navbar />
+      <Navbar />
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/films" element={<Films />} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/films" element={<Films />} />
+        <Route path="/customers" element={<Customers />} />
 
-          {/* Customers parent route */}
-          <Route path="/customers" element={<Customers />}/>
-
-          {/* catch 404 */}
-          <Route
-            path="*"
-            element={
-              <div style={{ padding: '4rem', textAlign: 'center' }}>
-                <h1>404 - Page Not Found</h1>
-                <p>Try going back to <a href="/">Home</a></p>
-              </div>
-            }
-          />
-        </Routes>
-      </div>
+        <Route
+          path="*"
+          element={
+            <div style={{ padding: "4rem", textAlign: "center" }}>
+              <h1>404 - Page Not Found</h1>
+              <p>
+                Try going back to <a href="/">Home</a>
+              </p>
+            </div>
+          }
+        />
+      </Routes>
     </BrowserRouter>
-  );
+  )
 }
-
-export default App;
