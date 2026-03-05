@@ -55,78 +55,124 @@ export default function Home() {
 
   return (
     <div className="px-8 py-16 space-y-12">
-      {/* ...dialogs... */}
+      <FilmDetailsDialog
+        open={filmDialogOpen}
+        onOpenChange={(open) => {
+          setFilmDialogOpen(open)
+          if (!open) setSelectedFilm(null)
+        }}
+        film={selectedFilm}
+      />
 
-      {/* Top 5 Rented Films */}
+      <ActorDetailsDialog
+        open={actorDialogOpen}
+        onOpenChange={(open) => {
+          setActorDialogOpen(open)
+          if (!open) setSelectedActor(null)
+        }}
+        actor={selectedActor}
+      />
+
       <section className="space-y-6">
         <h1 className="text-center text-4xl font-extrabold">Top 5 Rented Films</h1>
 
         <div className="flex justify-center">
           <div className="grid w-full max-w-[1400px] grid-cols-5 gap-4">
-            {topFilms?.slice(0, 5).map((film) => (
-              <Card key={film.film_id} className="w-full">
-                <CardHeader>
-                  <CardTitle className="text-sm leading-tight">{film.title}</CardTitle>
-                </CardHeader>
+            {filmsError ? (
+              <p className="col-span-5 text-center text-sm text-destructive">{filmsError}</p>
+            ) : topFilms ? (
+              topFilms.slice(0, 5).map((film) => (
+                <Card key={film.film_id} className="w-full">
+                  <CardHeader>
+                    <CardTitle className="text-sm leading-tight">{film.title}</CardTitle>
+                  </CardHeader>
 
-                <CardContent>
-                  <div className="h-[140px] w-full rounded-md border bg-muted/30 overflow-hidden flex items-center justify-center">
-                    <img
-                      src={filmPlaceholder}
-                      alt="Film poster placeholder"
-                      className="h-full w-full object-contain p-3"
-                      draggable={false}
-                    />
-                  </div>
+                  <CardContent>
+                    <div className="h-[140px] w-full rounded-md border bg-muted/30 overflow-hidden flex items-center justify-center">
+                      <img
+                        src={filmPlaceholder}
+                        alt="Film poster placeholder"
+                        className="h-full w-full object-contain p-3"
+                        draggable={false}
+                      />
+                    </div>
 
-                  <div className="mt-3 text-xs text-muted-foreground">
-                    Rentals: <span className="font-medium text-foreground">{film.rented}</span>
-                  </div>
-                </CardContent>
+                    <div className="mt-3 text-xs text-muted-foreground">
+                      Rentals: <span className="font-medium text-foreground">{film.rented}</span>
+                    </div>
+                  </CardContent>
 
-                <CardFooter className="justify-end">
-                  <Button size="sm" onClick={() => openFilmDetails(film)}>
-                    View Details
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                  <CardFooter className="justify-end">
+                    <Button size="sm" onClick={() => openFilmDetails(film)}>
+                      View Details
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))
+            ) : (
+              <p className="col-span-5 text-center">Loading films…</p>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Top 5 Actors */}
       <section className="space-y-6">
         <h1 className="text-center text-4xl font-extrabold">Top 5 Actors</h1>
 
         <div className="flex justify-center">
           <div className="grid w-full max-w-[1400px] grid-cols-5 gap-4">
-            {topActors?.slice(0, 5).map((actor) => (
-              <Card key={actor.actor_id} className="w-full">
-                <CardHeader>
-                  <CardTitle className="text-sm leading-tight">{actor.name}</CardTitle>
-                </CardHeader>
+            {actorsError ? (
+              <p className="col-span-5 text-center text-sm text-destructive">{actorsError}</p>
+            ) : topActors ? (
+              topActors.slice(0, 5).map((actor) => (
+                <Card key={actor.actor_id} className="w-full">
+                  <CardHeader>
+                    <CardTitle className="text-sm leading-tight">{actor.name}</CardTitle>
+                  </CardHeader>
 
-                <CardContent>
-                  <div className="h-[140px] w-full rounded-md border bg-muted/30 overflow-hidden flex items-center justify-center">
-                    <img
-                      src={actorPlaceholder}
-                      alt="Actor silhouette placeholder"
-                      className="h-full w-full object-contain p-3"
-                      draggable={false}
-                    />
-                  </div>
+                  <CardContent>
+                    <div className="h-[140px] w-full rounded-md border bg-muted/30 overflow-hidden flex items-center justify-center">
+                      <img
+                        src={actorPlaceholder}
+                        alt="Actor silhouette placeholder"
+                        className="h-full w-full object-contain p-3"
+                        draggable={false}
+                      />
+                    </div>
 
-                  {/* ...your stats... */}
-                </CardContent>
+                    <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                      {"total_rentals" in actor && (
+                        <div>
+                          Total rentals:{" "}
+                          <span className="font-medium text-foreground">{actor.total_rentals}</span>
+                        </div>
+                      )}
+                      {"film_count" in actor && (
+                        <div>
+                          Films: <span className="font-medium text-foreground">{actor.film_count}</span>
+                        </div>
+                      )}
+                      {"rentals_per_film" in actor && (
+                        <div>
+                          Rentals/film:{" "}
+                          <span className="font-medium text-foreground">
+                            {Number(actor.rentals_per_film).toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
 
-                <CardFooter className="justify-end">
-                  <Button size="sm" onClick={() => openActorDetails(actor)}>
-                    View Details
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                  <CardFooter className="justify-end">
+                    <Button size="sm" onClick={() => openActorDetails(actor)}>
+                      View Details
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))
+            ) : (
+              <p className="col-span-5 text-center">Loading actors…</p>
+            )}
           </div>
         </div>
       </section>
