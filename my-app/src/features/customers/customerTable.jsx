@@ -5,8 +5,8 @@ import { getColumns } from "@/components/customerTable/columns"
 
 import { Button } from "@/components/ui/button"
 
-import DeleteCustomerDialog from "./DeleteCustomerDialog"
-import RentalDetailsDialog from "./RentalDetailsDialog"
+import DeleteCustomerDialog from "./deleteCustomerDialog"
+import RentalDetailsDialog from "./rentalDetailsDialog"
 import CustomerFormDialog from "./customerFormDialog"
 
 export default function PaymentsPage() {

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-
+import { Toaster } from "@/components/ui/sonner"
 import Navbar from "./features/navbar/navbar"
 
 import Home from "./pages/Home"
@@ -27,6 +27,8 @@ export default function App() {
           }
         />
       </Routes>
+
+      <Toaster position="top-center" />
     </BrowserRouter>
   )
 }
